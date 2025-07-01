@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Robobionic Clinic Locator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="flex items-center space-x-3 mb-6">
+            <img src="{{ url_for('static', filename='logo_robobionics.png') }}" class="h-10" alt="Logo">
+            <h1 class="text-2xl font-bold text-gray-800">Clinic Locator</h1>
+        </div>
+
+        <form method="POST" class="bg-white p-6 rounded shadow-md space-y-4">
+            <input type="text" name="pincode" placeholder="Enter Pincode" class="w-full border rounded px-4 py-2" required>
+            <input type="text" name="city" placeholder="Enter City (optional)" class="w-full border rounded px-4 py-2">
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Search</button>
+        </form>
+
+        {% if results %}
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                {% for clinic in results %}
+                    <a href="{{ url_for('clinic_detail', name=clinic['Clinic Name']) }}" class="block bg-white p-4 rounded shadow hover:shadow-lg transition">
+                        <h2 class="text-lg font-semibold text-blue-700">{{ clinic['Clinic Name'] }}</h2>
+                        <p class="text-gray-600 text-sm mt-1">Doctor: {{ clinic['Doctor Name'] }}</p>
+                        <p class="text-yellow-500 text-sm">⭐ {{ clinic['Rating'] }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% elif pin or city %}
+            <p class="text-red-500 mt-4 font-medium">No matches found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
